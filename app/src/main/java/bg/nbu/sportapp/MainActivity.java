@@ -15,16 +15,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import bg.nbu.sportapp.adapters.SportsAdapter;
 import bg.nbu.sportapp.models.News;
+import bg.nbu.sportapp.models.Sport;
+import bg.nbu.sportapp.services.SportsApi;
+import bg.nbu.sportapp.services.SportsService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final boolean DEBUG = true;
+
+    private ListView mainList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +58,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        ListView newsList = findViewById(R.id.news_list);
-        NewsAdapter adapter = new NewsAdapter(this);
-
-        if (DEBUG) {
-            List<News> testList = new ArrayList<>();
-            testList.add(new News("Cska", new Date(), "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus augue ut nisl fringilla cursus. Nullam ante nunc, sodales eu quam nec, vehicula hendrerit dolor."));
-            testList.add(new News("Levski", new Date(), "Aliquam tempus sem diam, a pulvinar augue efficitur ac. Donec dignissim urna sit amet turpis finibus, at consectetur sem pellentesque. "));
-            testList.add(new News("Cherno more", new Date(), "Nam a ullamcorper massa, nec blandit nisl. In lobortis suscipit eros ac porta. Vestibulum eros risus, feugiat at elit ut, feugiat vulputate ligula."));
-            testList.add(new News("Slavia", new Date(), "Duis sed nunc ut ex mattis pellentesque. Proin consequat, orci at hendrerit tincidunt, massa leo vestibulum mauris, in ullamcorper libero sapien nec est."));
-            testList.add(new News("Ludogorets", new Date(), "Donec porta interdum augue, non blandit dolor malesuada vel. Morbi ut lobortis magna."));
-            adapter.setData(testList);
-        }
-
-        newsList.setAdapter(adapter);
+        mainList = findViewById(R.id.main_list);
     }
 
     @Override
@@ -102,8 +99,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
+        if (id == R.id.nav_sports) {
+            setSportsList();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -119,5 +116,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setSportsList() {
+        SportsService.GetSportsService().getSports().enqueue(new Callback<SportsApi.SportsResponse>() {
+            @Override
+            public void onResponse(Call<SportsApi.SportsResponse> call, Response<SportsApi.SportsResponse> response) {
+                if (response.body() != null) {
+                    List<Sport> sportList = response.body().sports;
+                    mainList.setAdapter(new SportsAdapter(getApplicationContext(), sportList));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SportsApi.SportsResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }

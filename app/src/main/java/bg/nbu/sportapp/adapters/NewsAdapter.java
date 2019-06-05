@@ -1,4 +1,4 @@
-package bg.nbu.sportapp;
+package bg.nbu.sportapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import bg.nbu.sportapp.R;
 import bg.nbu.sportapp.models.News;
 
 public class NewsAdapter extends BaseAdapter {
