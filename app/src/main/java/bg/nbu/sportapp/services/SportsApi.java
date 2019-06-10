@@ -11,17 +11,9 @@ import retrofit2.http.Query;
 public interface SportsApi {
 
     @GET("/api/the-sport-db/sports")
-    Call<SportsResponse> getSports();
+    Call<List<Sport>> getSports();
 
     @GET("/api/the-sport-db/leagues")
-    Call<LeaguesResponse> getLeagues(@Query("sportName") String sportName);
-
-    class SportsResponse {
-        public List<Sport> sports;
-    }
-
-    class LeaguesResponse {
-        public  List<League> leagues;
-    }
+    Call<List<League>> getLeagues(@Query("sportName") String sportName);
 
 }

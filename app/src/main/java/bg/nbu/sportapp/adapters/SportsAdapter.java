@@ -7,29 +7,30 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import bg.nbu.sportapp.MainActivity;
 import bg.nbu.sportapp.R;
+import bg.nbu.sportapp.fragments.SportListPageFragment;
 import bg.nbu.sportapp.models.Sport;
 
 public class SportsAdapter extends BaseExpandableListAdapter {
 
     private LayoutInflater inflater;
     private List<Sport> sportsList;
-    private MainActivity context;
+    private Context context;
+    private SportListPageFragment fragment;
 
-    public SportsAdapter(MainActivity context) {
+    public SportsAdapter(Context context) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public SportsAdapter(MainActivity context, List<Sport> sportsList) {
+    public SportsAdapter(Context context, List<Sport> sportsList, SportListPageFragment fragment) {
         this(context);
+        this.fragment = fragment;
         setData(sportsList);
     }
 
@@ -75,7 +76,7 @@ public class SportsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int position, boolean b, View view, ViewGroup viewGroup) {
-        Holder holder;
+        final Holder holder;
 
         if (view == null) {
             holder = new Holder();
@@ -98,7 +99,7 @@ public class SportsAdapter extends BaseExpandableListAdapter {
         holder.leagueSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.setLeaguesList(sport.getName());
+                fragment.setSelectedSport(sport.getName());
             }
         });
 
