@@ -66,7 +66,7 @@ public class TeamsAdapter extends BaseAdapter {
 
         holder.name.setText(team.getName());
 
-        Picasso.get().load(team.getBadgeUrl()).into(holder.badge);
+        Picasso.get().load(team.getBadgeUrl()).placeholder(R.drawable.progress_image).into(holder.badge);
 
         view.setTag(R.string.team, team);
 

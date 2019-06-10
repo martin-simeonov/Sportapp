@@ -93,7 +93,7 @@ public class SportsAdapter extends BaseExpandableListAdapter {
         final Sport sport = sportsList.get(position);
 
         holder.name.setText(sport.getName());
-        Picasso.get().load(sport.getImageLink()).into(holder.image);
+        Picasso.get().load(sport.getImageLink()).placeholder(R.drawable.progress_image).into(holder.image);
 
         holder.leagueSearchButton.setFocusable(false);
         holder.leagueSearchButton.setOnClickListener(new View.OnClickListener() {
