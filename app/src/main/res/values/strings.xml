@@ -17,4 +17,7 @@
     <string name="empty_league_list">No sport selected</string>
     <string name="empty_team_list">No sport/league selected</string>
 
+    <string name="team">Team</string>
+    <string name="country">Country</string>
+    <string name="formed_in">Formed in %d</string>
 </resources>

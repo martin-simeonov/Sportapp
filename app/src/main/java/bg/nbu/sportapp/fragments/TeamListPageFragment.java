@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import bg.nbu.sportapp.R;
 import bg.nbu.sportapp.adapters.TeamsAdapter;
-import bg.nbu.sportapp.models.League;
 import bg.nbu.sportapp.models.Team;
 import bg.nbu.sportapp.services.SportsService;
 import retrofit2.Call;
@@ -30,7 +28,6 @@ public class TeamListPageFragment extends Fragment {
     public TeamListPageFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +48,9 @@ public class TeamListPageFragment extends Fragment {
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
                 if (response.body() != null) {
                     List<Team> teamsList = response.body();
-                    teamList.setAdapter(new TeamsAdapter(getActivity(), teamsList));
+                    TeamsAdapter adapter = new TeamsAdapter(getActivity(), teamsList);
+                    teamList.setAdapter(adapter);
+                    teamList.setOnItemClickListener(adapter.myClickListener);
 
                     emptyMessage.setVisibility(View.GONE);
                 }
