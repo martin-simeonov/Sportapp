@@ -1,7 +1,6 @@
 package bg.nbu.sportapp.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,7 +15,6 @@ public class SportsFragment extends Fragment {
 
     private ViewPager mPager;
     private ScreenSlidePagerAdapter pagerAdapter;
-    private String selectedSport;
     private SportsFragment context = this;
 
     public SportsFragment() {
@@ -31,6 +29,7 @@ public class SportsFragment extends Fragment {
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = view.findViewById(R.id.pager);
+        mPager.setOffscreenPageLimit(2);
         pagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager());
         mPager.setAdapter(pagerAdapter);
 
@@ -43,6 +42,7 @@ public class SportsFragment extends Fragment {
         }
 
         LeagueListPageFragment leagueListPageFragment;
+        TeamListPageFragment teamListPageFragment;
 
         @Override
         public Fragment getItem(int position) {
@@ -53,14 +53,18 @@ public class SportsFragment extends Fragment {
                     return fragment;
                 case 1:
                     leagueListPageFragment = new LeagueListPageFragment();
+                    leagueListPageFragment.setSportsFragment(context);
                     return leagueListPageFragment;
+                case 2:
+                    teamListPageFragment = new TeamListPageFragment();
+                    return teamListPageFragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -77,16 +81,17 @@ public class SportsFragment extends Fragment {
         }
     }
 
-    public String getSelectedSport() {
-        return selectedSport;
-    }
-
     public void setSelectedSport(String selectedSport) {
-        this.selectedSport = selectedSport;
-
         if (pagerAdapter.leagueListPageFragment != null) {
             pagerAdapter.leagueListPageFragment.setLeaguesList(selectedSport);
             mPager.setCurrentItem(1, true);
+        }
+    }
+
+    public void setSelectedLeague(int leagueId) {
+        if (pagerAdapter.teamListPageFragment != null) {
+            pagerAdapter.teamListPageFragment.setTeamList(leagueId);
+            mPager.setCurrentItem(2, true);
         }
     }
 

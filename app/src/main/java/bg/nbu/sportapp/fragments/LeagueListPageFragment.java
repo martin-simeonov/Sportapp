@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class LeagueListPageFragment extends Fragment {
 
     private ListView leagueList;
     private TextView emptyMessage;
+    private ArrayAdapter<League> adapter;
+    private SportsFragment sportsFragment;
 
     public LeagueListPageFragment() {
         // Required empty public constructor
@@ -37,8 +40,17 @@ public class LeagueListPageFragment extends Fragment {
 
         leagueList = view.findViewById(R.id.league_list);
         emptyMessage = view.findViewById(R.id.empty_league_list);
-
         emptyMessage.setVisibility(View.VISIBLE);
+
+        leagueList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                League league = adapter.getItem(position);
+                if (league != null && sportsFragment != null) {
+                    sportsFragment.setSelectedLeague(league.getId());
+                }
+            }
+        });
         return view;
     }
 
@@ -48,7 +60,8 @@ public class LeagueListPageFragment extends Fragment {
             public void onResponse(Call<List<League>> call, Response<List<League>> response) {
                 if (response.body() != null) {
                     List<League> leaguesList = response.body();
-                    leagueList.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, leaguesList));
+                    adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, leaguesList);
+                    leagueList.setAdapter(adapter);
 
                     emptyMessage.setVisibility(View.GONE);
                 }
@@ -59,6 +72,10 @@ public class LeagueListPageFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void setSportsFragment(SportsFragment sportsFragment) {
+        this.sportsFragment = sportsFragment;
     }
 
 }

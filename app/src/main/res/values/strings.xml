@@ -15,4 +15,6 @@
     <string name="menu_send">Send</string>
 
     <string name="empty_league_list">No sport selected</string>
+    <string name="empty_team_list">No sport/league selected</string>
+
 </resources>

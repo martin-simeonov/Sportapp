@@ -4,6 +4,7 @@ import java.util.List;
 
 import bg.nbu.sportapp.models.League;
 import bg.nbu.sportapp.models.Sport;
+import bg.nbu.sportapp.models.Team;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -15,5 +16,8 @@ public interface SportsApi {
 
     @GET("/api/the-sport-db/leagues")
     Call<List<League>> getLeagues(@Query("sportName") String sportName);
+
+    @GET("/api/the-sport-db/teams")
+    Call<List<Team>> getTeams(@Query("leagueId") int leagueId);
 
 }
