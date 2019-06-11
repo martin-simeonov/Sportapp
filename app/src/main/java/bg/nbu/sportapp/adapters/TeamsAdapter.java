@@ -96,12 +96,16 @@ public class TeamsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return teamList.size();
+        if (teamList != null)
+            return teamList.size();
+        return 0;
     }
 
     @Override
     public Object getItem(int i) {
-        return teamList.get(i);
+        if (teamList != null)
+            return teamList.get(i);
+        return null;
     }
 
     @Override

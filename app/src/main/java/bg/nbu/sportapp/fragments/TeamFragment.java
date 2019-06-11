@@ -67,9 +67,7 @@ public class TeamFragment extends DialogFragment {
         Picasso.get().load(team.getBadgeUrl()).placeholder(R.drawable.progress_image).into(badge);
 
         favoriteTeamsStore = getActivity().getSharedPreferences(MainActivity.FAVORITE_TEAMS_STORE, 0);
-        favoriteTeams = favoriteTeamsStore.getStringSet(MainActivity.FAVORITE_TEAMS, null);
-        if (favoriteTeams == null)
-            favoriteTeams = new HashSet<>();
+        favoriteTeams = new HashSet<>(favoriteTeamsStore.getStringSet(MainActivity.FAVORITE_TEAMS, new HashSet<>()));
 
         SparkButton favoriteButton = view.findViewById(R.id.favorite_button);
         if (favoriteTeams.contains(String.valueOf(team.getId())))
@@ -83,7 +81,7 @@ public class TeamFragment extends DialogFragment {
                 } else {
                     favoriteTeams.remove(String.valueOf(team.getId()));
                 }
-                favoriteTeamsStore.edit().putStringSet("FavoriteTeams", favoriteTeams).apply();
+                favoriteTeamsStore.edit().putStringSet(MainActivity.FAVORITE_TEAMS, favoriteTeams).apply();
             }
 
             @Override

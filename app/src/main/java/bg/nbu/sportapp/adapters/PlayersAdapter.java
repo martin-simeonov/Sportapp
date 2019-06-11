@@ -15,7 +15,6 @@ import java.util.List;
 
 import bg.nbu.sportapp.R;
 import bg.nbu.sportapp.models.Player;
-import bg.nbu.sportapp.models.Team;
 
 public class PlayersAdapter extends BaseAdapter {
 
@@ -78,12 +77,16 @@ public class PlayersAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return players.size();
+        if (players != null)
+            return players.size();
+        return 0;
     }
 
     @Override
     public Object getItem(int i) {
-        return players.get(i);
+        if (players != null)
+            return players.get(i);
+        return null;
     }
 
     @Override

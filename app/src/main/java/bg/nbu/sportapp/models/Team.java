@@ -1,6 +1,7 @@
 package bg.nbu.sportapp.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Team implements Serializable {
     private int id;
@@ -17,6 +18,8 @@ public class Team implements Serializable {
     private String logoUrl;
     private Stadium stadium;
     private String websiteUrl;
+
+    private List<Event> events;
 
     public int getId() {
         return id;
@@ -128,5 +131,13 @@ public class Team implements Serializable {
 
     public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }

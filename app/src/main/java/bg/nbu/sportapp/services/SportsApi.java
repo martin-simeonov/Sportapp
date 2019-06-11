@@ -2,6 +2,7 @@ package bg.nbu.sportapp.services;
 
 import java.util.List;
 
+import bg.nbu.sportapp.models.Event;
 import bg.nbu.sportapp.models.League;
 import bg.nbu.sportapp.models.Player;
 import bg.nbu.sportapp.models.Sport;
@@ -24,6 +25,12 @@ public interface SportsApi {
 
     @GET("/api/the-sport-db/teams/{id}")
     Call<TeamResponse> getTeam(@Path("id") int id);
+
+    @GET("/api/the-sport-db/events/upcoming")
+    Call<List<Event>> getUpcomingEvents(@Query("teamId") int teamId);
+
+    @GET("/api/the-sport-db/events/previous")
+    Call<List<Event>> getPreviousEvents(@Query("teamId") int teamId);
 
     class TeamResponse {
         private Team team;

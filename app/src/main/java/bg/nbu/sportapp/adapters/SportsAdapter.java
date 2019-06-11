@@ -41,7 +41,9 @@ public class SportsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return sportsList.size();
+        if (sportsList != null)
+            return sportsList.size();
+        return 0;
     }
 
     @Override
@@ -51,12 +53,16 @@ public class SportsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Sport getGroup(int i) {
-        return sportsList.get(i);
+        if (sportsList != null)
+            return sportsList.get(i);
+        return null;
     }
 
     @Override
     public String getChild(int i, int i1) {
-        return sportsList.get(i).getDescription();
+        if (sportsList != null)
+            return sportsList.get(i).getDescription();
+        return "";
     }
 
     @Override
