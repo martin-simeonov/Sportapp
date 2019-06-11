@@ -43,7 +43,15 @@ public class SportsService {
         return sportsApi;
     }
 
+    public static void GetTeamWithEventsPrevious(List<Integer> teamIds, TeamWithEventsCallback callback) {
+        GetTeamWithEventsCommon(teamIds, callback, true);
+    }
+
     public static void GetTeamWithEvents(List<Integer> teamIds, TeamWithEventsCallback callback) {
+        GetTeamWithEventsCommon(teamIds, callback, false);
+    }
+
+    private static void GetTeamWithEventsCommon(List<Integer> teamIds, TeamWithEventsCallback callback, boolean previous) {
         List<Team> teams = new ArrayList<>();
         for (Integer id : teamIds) {
             GetSportsService().getTeam(id).enqueue(new Callback<SportsApi.TeamResponse>() {
@@ -53,8 +61,10 @@ public class SportsService {
                         teams.add(response.body().getTeam());
 
                         if (teams.size() == teamIds.size()) {
-                            getEvents(teams, callback);
+                            getEvents(teams, callback, previous);
                         }
+                    } else {
+                        callback.onFail();
                     }
                 }
 
@@ -66,27 +76,52 @@ public class SportsService {
         }
     }
 
+    private static int countTeamsPrevious = 0;
     private static int countTeams = 0;
 
-    private static void getEvents(List<Team> teams, TeamWithEventsCallback callback) {
+    private static void getEvents(List<Team> teams, TeamWithEventsCallback callback, boolean previous) {
         countTeams = 0;
+        countTeamsPrevious = 0;
         for (Team team : teams) {
-            GetSportsService().getUpcomingEvents(team.getId()).enqueue(new Callback<List<Event>>() {
-                @Override
-                public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                    if (response.body() != null) {
-                        team.setEvents(response.body());
-                        countTeams++;
-                        if (countTeams == teams.size())
-                            callback.onResult(teams);
+            if (previous) {
+                GetSportsService().getPreviousEvents(team.getId()).enqueue(new Callback<List<Event>>() {
+                    @Override
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                        if (response.body() != null) {
+                            team.setEvents(response.body());
+                            countTeamsPrevious++;
+                            if (countTeamsPrevious == teams.size())
+                                callback.onResult(teams);
+                        } else {
+                            callback.onFail();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<List<Event>> call, Throwable t) {
-                    callback.onFail();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                        callback.onFail();
+                    }
+                });
+            } else {
+                GetSportsService().getUpcomingEvents(team.getId()).enqueue(new Callback<List<Event>>() {
+                    @Override
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                        if (response.body() != null) {
+                            team.setEvents(response.body());
+                            countTeams++;
+                            if (countTeams == teams.size())
+                                callback.onResult(teams);
+                        } else {
+                            callback.onFail();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
+                        callback.onFail();
+                    }
+                });
+            }
         }
     }
 

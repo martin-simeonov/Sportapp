@@ -1,10 +1,15 @@
 package bg.nbu.sportapp.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,18 +22,18 @@ import bg.nbu.sportapp.R;
 import bg.nbu.sportapp.models.Event;
 import bg.nbu.sportapp.models.Team;
 
-public class EventsAdapter extends BaseExpandableListAdapter {
+public class EventsPreviousAdapter extends BaseExpandableListAdapter {
 
     private LayoutInflater inflater;
     private List<Team> teamList;
     private Context context;
 
-    public EventsAdapter(Context context) {
+    public EventsPreviousAdapter(Context context) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public EventsAdapter(Context context, List<Team> teamList) {
+    public EventsPreviousAdapter(Context context, List<Team> teamList) {
         this(context);
         setData(teamList);
     }
@@ -109,7 +114,8 @@ public class EventsAdapter extends BaseExpandableListAdapter {
 
 
     class HolderChild {
-        TextView homeTeam, awayTeam, dateTime, name, emptyMessage;
+        TextView homeTeam, awayTeam, score, dateTime, name, emptyMessage;
+        ImageView video;
         LinearLayout main;
     }
 
@@ -120,13 +126,15 @@ public class EventsAdapter extends BaseExpandableListAdapter {
         if (view == null) {
             holder = new HolderChild();
 
-            view = inflater.inflate(R.layout.events_list_item, null);
+            view = inflater.inflate(R.layout.previous_events_list_item, null);
             holder.name = view.findViewById(R.id.event_name);
             holder.homeTeam = view.findViewById(R.id.event_home_team);
             holder.awayTeam = view.findViewById(R.id.event_away_team);
+            holder.score = view.findViewById(R.id.event_score);
             holder.dateTime = view.findViewById(R.id.event_date_time);
             holder.main = view.findViewById(R.id.event_list_item);
             holder.emptyMessage = view.findViewById(R.id.event_list_item_message);
+            holder.video = view.findViewById(R.id.event_video);
 
             view.setTag(holder);
         } else {
@@ -143,18 +151,56 @@ public class EventsAdapter extends BaseExpandableListAdapter {
             Event event = teamList.get(position).getEvents().get(childPosition);
 
             holder.name.setText(event.getEvent());
+            if (event.getAwayTeam().isEmpty()) {
+                holder.score.setVisibility(View.INVISIBLE);
+            } else {
+                holder.score.setText(context.getString(R.string.score, event.getHomeTeamScore(), event.getAwayTeamScore()));
+            }
             holder.homeTeam.setText(event.getHomeTeam());
             holder.awayTeam.setText(event.getAwayTeam());
             holder.dateTime.setText(context.getString(R.string.date_time_placeholder, event.getEventDate(),
                     event.getEventStartTime() == null ? "" : event.getEventStartTime()));
+
+            if (event.getVideoUrl() != null && !event.getVideoUrl().isEmpty()) {
+                holder.video.setVisibility(View.VISIBLE);
+                String videoId = event.getVideoUrl().split("=")[1];
+                Picasso.get().load(String.format("https://img.youtube.com/vi/%s/0.jpg", videoId)).placeholder(R.drawable.progress_image).into(holder.video);
+
+                holder.video.setOnClickListener(v -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setData(Uri.parse(event.getVideoUrl()));
+                    context.startActivity(intent);
+                });
+            } else {
+                holder.video.setVisibility(View.GONE);
+            }
+
+            view.setTag(R.string.event, event);
         }
 
         return view;
     }
 
+    public ExpandableListView.OnChildClickListener myClickListener = (expandableListView, view, i, i1, l) -> {
+        Event event = (Event) view.getTag(R.string.event);
+        if (event == null || event.getResultDescription() == null || event.getResultDescription().isEmpty())
+            return false;
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(event.getDescription())
+                .setPositiveButton("Ok", (dialog1, which) -> {
+                    dialog1.dismiss();
+                })
+                .create();
+        dialog.show();
+        return true;
+    };
+
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
 
 }

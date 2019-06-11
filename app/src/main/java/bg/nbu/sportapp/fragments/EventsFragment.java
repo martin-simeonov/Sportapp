@@ -46,13 +46,14 @@ public class EventsFragment extends Fragment {
                 case 0:
                     return new EventsIncomingFragment();
                 case 1:
+                    return new EventsPreviousFragment();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
         @Override

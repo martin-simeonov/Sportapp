@@ -21,7 +21,7 @@
         android:visibility="gone" />
 
     <ExpandableListView
-        android:id="@+id/upcoming_events"
+        android:id="@+id/events"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

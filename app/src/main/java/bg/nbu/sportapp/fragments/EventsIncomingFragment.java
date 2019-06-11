@@ -1,6 +1,7 @@
 package bg.nbu.sportapp.fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,9 +24,10 @@ import bg.nbu.sportapp.services.SportsService;
 public class EventsIncomingFragment extends Fragment {
 
 
-    private ExpandableListView upcomingEvents;
+    protected ExpandableListView events;
     private TextView emptyMessage;
-    private TextView errorMessage;
+    protected TextView errorMessage;
+    protected ProgressDialog progressDialog;
 
     public EventsIncomingFragment() {
         // Required empty public constructor
@@ -35,13 +37,17 @@ public class EventsIncomingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_events_incoming, container, false);
+        View view = inflater.inflate(R.layout.fragment_events_list, container, false);
 
-        upcomingEvents = view.findViewById(R.id.upcoming_events);
+        events = view.findViewById(R.id.events);
         emptyMessage = view.findViewById(R.id.empty_events);
         errorMessage = view.findViewById(R.id.events_error);
 
-        setUpcomingEvents();
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading. Please wait...");
+        progressDialog.setCancelable(true);
+
+        setEventsList();
 
         return view;
     }
@@ -59,22 +65,30 @@ public class EventsIncomingFragment extends Fragment {
         return teamIds;
     }
 
-    private void setUpcomingEvents() {
+    private void setEventsList() {
+        progressDialog.show();
+
         List<Integer> teams = getFavoriteTeams();
         if (!teams.isEmpty())
             emptyMessage.setVisibility(View.GONE);
 
+        setAdapter(teams);
+    }
+
+    public void setAdapter(List<Integer> teams) {
         EventsAdapter adapter = new EventsAdapter(getActivity());
-        upcomingEvents.setAdapter(adapter);
+        events.setAdapter(adapter);
         SportsService.GetTeamWithEvents(teams, new SportsService.TeamWithEventsCallback() {
             @Override
             public void onResult(List<Team> teamList) {
                 adapter.setData(teamList);
+                progressDialog.cancel();
             }
 
             @Override
             public void onFail() {
                 errorMessage.setVisibility(View.VISIBLE);
+                progressDialog.cancel();
             }
         });
     }
