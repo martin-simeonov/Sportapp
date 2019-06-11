@@ -78,7 +78,7 @@ public class EventsIncomingFragment extends Fragment {
     public void setAdapter(List<Integer> teams) {
         EventsAdapter adapter = new EventsAdapter(getActivity());
         events.setAdapter(adapter);
-        SportsService.GetTeamWithEvents(teams, new SportsService.TeamWithEventsCallback() {
+        SportsService.GetTeamWithEvents(teams, new SportsService.TeamsCallback() {
             @Override
             public void onResult(List<Team> teamList) {
                 adapter.setData(teamList);

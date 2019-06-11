@@ -17,7 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import bg.nbu.sportapp.fragments.EventsFragment;
+import bg.nbu.sportapp.fragments.FavoritesFragment;
 import bg.nbu.sportapp.fragments.SportsFragment;
+import bg.nbu.sportapp.fragments.TeamListPageFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,10 +101,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new EventsFragment();
         } else if (id == R.id.nav_sports) {
             fragment = new SportsFragment();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
+        } else if (id == R.id.nav_favorites) {
+            fragment = new FavoritesFragment();
         }
 
         // Insert the fragment by replacing any existing fragment

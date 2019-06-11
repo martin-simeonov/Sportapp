@@ -19,7 +19,7 @@ public class EventsPreviousFragment extends EventsIncomingFragment {
     public void setAdapter(List<Integer> teams) {
         EventsPreviousAdapter adapter = new EventsPreviousAdapter(getActivity());
         events.setAdapter(adapter);
-        SportsService.GetTeamWithEventsPrevious(teams, new SportsService.TeamWithEventsCallback() {
+        SportsService.GetTeamWithEventsPrevious(teams, new SportsService.TeamsCallback() {
             @Override
             public void onResult(List<Team> teamList) {
                 adapter.setData(teamList);

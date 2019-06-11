@@ -3,7 +3,6 @@ package bg.nbu.sportapp.services;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,15 +42,39 @@ public class SportsService {
         return sportsApi;
     }
 
-    public static void GetTeamWithEventsPrevious(List<Integer> teamIds, TeamWithEventsCallback callback) {
+    public static void GetTeams(List<Integer> teamIds, TeamsCallback callback) {
+        List<Team> teams = new ArrayList<>();
+        for (Integer id : teamIds) {
+            GetSportsService().getTeam(id).enqueue(new Callback<SportsApi.TeamResponse>() {
+                @Override
+                public void onResponse(Call<SportsApi.TeamResponse> call, Response<SportsApi.TeamResponse> response) {
+                    if (response.body() != null) {
+                        teams.add(response.body().getTeam());
+                        if (teams.size() == teamIds.size()) {
+                            callback.onResult(teams);
+                        }
+                    } else {
+                        callback.onFail();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SportsApi.TeamResponse> call, Throwable t) {
+                    callback.onFail();
+                }
+            });
+        }
+    }
+
+    public static void GetTeamWithEventsPrevious(List<Integer> teamIds, TeamsCallback callback) {
         GetTeamWithEventsCommon(teamIds, callback, true);
     }
 
-    public static void GetTeamWithEvents(List<Integer> teamIds, TeamWithEventsCallback callback) {
+    public static void GetTeamWithEvents(List<Integer> teamIds, TeamsCallback callback) {
         GetTeamWithEventsCommon(teamIds, callback, false);
     }
 
-    private static void GetTeamWithEventsCommon(List<Integer> teamIds, TeamWithEventsCallback callback, boolean previous) {
+    private static void GetTeamWithEventsCommon(List<Integer> teamIds, TeamsCallback callback, boolean previous) {
         List<Team> teams = new ArrayList<>();
         for (Integer id : teamIds) {
             GetSportsService().getTeam(id).enqueue(new Callback<SportsApi.TeamResponse>() {
@@ -79,7 +102,7 @@ public class SportsService {
     private static int countTeamsPrevious = 0;
     private static int countTeams = 0;
 
-    private static void getEvents(List<Team> teams, TeamWithEventsCallback callback, boolean previous) {
+    private static void getEvents(List<Team> teams, TeamsCallback callback, boolean previous) {
         countTeams = 0;
         countTeamsPrevious = 0;
         for (Team team : teams) {
@@ -125,7 +148,7 @@ public class SportsService {
         }
     }
 
-    public interface TeamWithEventsCallback {
+    public interface TeamsCallback {
         void onResult(List<Team> teamList);
 
         void onFail();
