@@ -35,6 +35,7 @@ import bg.nbu.sportapp.fragments.FavoritesFragment;
 import bg.nbu.sportapp.fragments.SportsFragment;
 import bg.nbu.sportapp.fragments.TeamListPageFragment;
 import bg.nbu.sportapp.models.Event;
+import bg.nbu.sportapp.services.AlarmService;
 import bg.nbu.sportapp.services.NotificationAlarm;
 
 public class MainActivity extends AppCompatActivity
@@ -71,18 +72,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.content, new EventsFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_events);
 
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, NotificationAlarm.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 30);
-
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis(),
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+        startService(new Intent(this, AlarmService.class));
     }
 
     @Override
