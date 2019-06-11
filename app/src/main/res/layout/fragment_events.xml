@@ -5,23 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".fragments.EventsFragment">
 
-    <TextView
-        android:id="@+id/empty_events"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/events_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/empty_events" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/events_error"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/events_error"
-        android:visibility="gone" />
-
-    <ExpandableListView
-        android:id="@+id/upcoming_events"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <android.support.v4.view.PagerTitleStrip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" />
+    </android.support.v4.view.ViewPager>
 </FrameLayout>
