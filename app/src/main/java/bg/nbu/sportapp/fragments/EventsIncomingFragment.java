@@ -66,11 +66,12 @@ public class EventsIncomingFragment extends Fragment {
     }
 
     private void setEventsList() {
-        progressDialog.show();
 
         List<Integer> teams = getFavoriteTeams();
-        if (!teams.isEmpty())
+        if (!teams.isEmpty()) {
             emptyMessage.setVisibility(View.GONE);
+            progressDialog.show();
+        }
 
         setAdapter(teams);
     }
