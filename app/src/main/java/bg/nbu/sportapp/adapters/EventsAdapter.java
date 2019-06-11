@@ -139,6 +139,7 @@ public class EventsAdapter extends BaseExpandableListAdapter {
             holder.emptyMessage.setVisibility(View.VISIBLE);
             holder.main.setVisibility(View.GONE);
         } else {
+            holder.main.setVisibility(View.VISIBLE);
             holder.emptyMessage.setVisibility(View.GONE);
             Event event = teamList.get(position).getEvents().get(childPosition);
 
