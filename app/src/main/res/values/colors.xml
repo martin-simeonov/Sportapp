@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="twitter_primary_color">#F5A623</color>
-    <color name="twitter_secondary_color">#CCD6DD</color>
+    <color name="star_primary_color">#F5A623</color>
+    <color name="star_secondary_color">#CCD6DD</color>
 </resources>

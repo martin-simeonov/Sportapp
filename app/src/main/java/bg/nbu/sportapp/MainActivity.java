@@ -22,7 +22,9 @@ import bg.nbu.sportapp.fragments.SportsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private MainActivity context;
+    public static String FAVORITE_TEAMS_STORE = "FavoriteTeamsStore";
+    public static String FAVORITE_TEAMS = "FavoriteTeams";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        context = this;
     }
 
     @Override

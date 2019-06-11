@@ -1,6 +1,7 @@
 package bg.nbu.sportapp.fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -11,7 +12,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import bg.nbu.sportapp.MainActivity;
 import bg.nbu.sportapp.R;
 import bg.nbu.sportapp.adapters.PlayersAdapter;
 import bg.nbu.sportapp.models.Team;
@@ -25,6 +32,9 @@ public class TeamFragment extends DialogFragment {
 
     private Team team;
     private ListView playersList;
+
+    private Set<String> favoriteTeams;
+    private SharedPreferences favoriteTeamsStore;
 
     public TeamFragment() {
         // Required empty public constructor
@@ -56,8 +66,38 @@ public class TeamFragment extends DialogFragment {
         ImageView badge = view.findViewById(R.id.badge);
         Picasso.get().load(team.getBadgeUrl()).placeholder(R.drawable.progress_image).into(badge);
 
-        playersList = view.findViewById(R.id.players_list);
+        favoriteTeamsStore = getActivity().getSharedPreferences(MainActivity.FAVORITE_TEAMS_STORE, 0);
+        favoriteTeams = favoriteTeamsStore.getStringSet(MainActivity.FAVORITE_TEAMS, null);
+        if (favoriteTeams == null)
+            favoriteTeams = new HashSet<>();
 
+        SparkButton favoriteButton = view.findViewById(R.id.favorite_button);
+        if (favoriteTeams.contains(String.valueOf(team.getId())))
+            favoriteButton.setChecked(true);
+
+        favoriteButton.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (buttonState) {
+                    favoriteTeams.add(String.valueOf(team.getId()));
+                } else {
+                    favoriteTeams.remove(String.valueOf(team.getId()));
+                }
+                favoriteTeamsStore.edit().putStringSet("FavoriteTeams", favoriteTeams).apply();
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+
+        playersList = view.findViewById(R.id.players_list);
         setPlayersList();
         return view;
     }

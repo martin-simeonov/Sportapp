@@ -64,7 +64,7 @@
             android:orientation="vertical">
 
             <com.varunest.sparkbutton.SparkButton
-                android:id="@+id/spark_button"
+                android:id="@+id/favorite_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
@@ -74,8 +74,8 @@
                 app:sparkbutton_activeImage="@drawable/ic_star_rate_on"
                 app:sparkbutton_iconSize="40dp"
                 app:sparkbutton_inActiveImage="@drawable/ic_star_rate_off"
-                app:sparkbutton_primaryColor="@color/twitter_primary_color"
-                app:sparkbutton_secondaryColor="@color/twitter_secondary_color" />
+                app:sparkbutton_primaryColor="@color/star_primary_color"
+                app:sparkbutton_secondaryColor="@color/star_secondary_color" />
 
             <ImageView
                 android:id="@+id/badge"
