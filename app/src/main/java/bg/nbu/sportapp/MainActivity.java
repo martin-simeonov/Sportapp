@@ -1,22 +1,11 @@
 package bg.nbu.sportapp;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,15 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import java.util.Calendar;
-
 import bg.nbu.sportapp.fragments.EventsFragment;
 import bg.nbu.sportapp.fragments.FavoritesFragment;
 import bg.nbu.sportapp.fragments.SportsFragment;
-import bg.nbu.sportapp.fragments.TeamListPageFragment;
-import bg.nbu.sportapp.models.Event;
 import bg.nbu.sportapp.services.AlarmService;
-import bg.nbu.sportapp.services.NotificationAlarm;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
